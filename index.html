@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <title>MultipleView</title>
+    <style>
+        svg {width: 40vw; height: 40vw;}
+    </style>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="js/scatter_plot.js"></script>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+
+    <div class="row">
+        <svg viewBox="0 0 1000 1000" id="figure1"></svg>
+    </div>
+
+
+
+    <!-- jQuery 3 -->
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="scatter_plot.js?2"></script>
+    <script src="bar_plot.js?2"></script>
+
+    <script>
+    let palmer_penguin_species = "../data/palmer_penguin_species.tsv";
+    // loading data
+    d3.tsv(palmer_penguin_species).then(main)
+
+    // Subplots
+    let fig1 = d3.select("#main") //center plot
+        .append("g")
+        .append('rect')
+        .attr("class","fig")
+        .attr("width","100%")
+        .attr("height","100%")
+
+    // right svg
+    let fig2 = d3.select("#right") //right plot
+        .append("g")
+        .append('rect')
+        .attr("class","fig")
+        .attr("width","100%")
+        .attr("height","100%")
+
+    // top svg
+    let fig3 = d3.select("#top") //top plot
+        .append("g")
+        .append('rect')
+        .attr("class","fig")
+        .attr("width","100%")
+        .attr("height","100%")
+
+    function main(data){
+        // fetch data from table
+        let culmen_depth_mm = d3.map(data,function (d){
+            return +d.culmen_depth_mm})
+        let culmen_length_mm = d3.map(data,function (d){
+            return +d.culmen_length_mm})
+        let flipper_length_mm = d3.map(data,function (d){
+            return +d.flipper_length_mm})
+        let island = d3.map(data,function (d){
+            return d.island})
+        let island_types = new Set(island)
+
+        let island_code = d3.map(data,function (d) {
+            island = d.island
+            if (island === "Dream") {
+                return 0
+            } else if (island === "Torgersen") {
+                return 1
+            } else {
+                return 2
+            }
+        })
+
+        // main svg
+        scatter_plot(culmen_length_mm,
+        culmen_depth_mm,
+            10,
+            island_code,
+            'main'
+            ,title='Penguin Species',
+            xLabel="culmen_length_mm",
+            yLabel="culmen_depth_mm");
+        //#############
+        bar_plot(culmen_length_mm, 10,'top')
+        h_bar_plot(culmen_depth_mm,10,'right')
+
+    }
+    </script>
+</body>
+
+</html>
