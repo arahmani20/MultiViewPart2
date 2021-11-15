@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
+
     <script src="js/bootstrap.min.js"></script>
     <title>MultipleView</title>
     <style>
@@ -23,8 +24,7 @@
     </div>
 
 
-    <script src="js/jquery-3.6.0.min.js">
-    </script>
+    <script src="js/jquery-3.6.0.min.js"></script>
     
     <script src="js/bootstrap.min.js"></script>
     <script src="scatter_plot.js?2"></script>
@@ -36,15 +36,7 @@
     d3.tsv(palmer_penguin_species).then(main)
 
     // Subplots
-    let fig_main = d3.select("#main") 
-        .append("g")
-        .append('rect')
-        .attr("class","fig")
-        .attr("width","100%")
-        .attr("height","100%")
-
-    // right svg
-    let fig_right = d3.select("#right") 
+    let fig_main= d3.select("#main") //center plot
         .append("g")
         .append('rect')
         .attr("class","fig")
@@ -52,7 +44,15 @@
         .attr("height","100%")
 
     // top svg
-    let fig_top = d3.select("#top")
+    let fig_top = d3.select("#top") //top plot
+        .append("g")
+        .append('rect')
+        .attr("class","fig")
+        .attr("width","100%")
+        .attr("height","100%")
+
+    // right svg
+    let fig_right = d3.select("#right") //right plot
         .append("g")
         .append('rect')
         .attr("class","fig")
@@ -60,7 +60,7 @@
         .attr("height","100%")
 
     function main(data){
-        // fetch data from table
+        // fetch data from table -- length
         let culmen_depth_mm = d3.map(data,function (d){
             return +d.culmen_depth_mm})
         let culmen_length_mm = d3.map(data,function (d){
@@ -92,8 +92,19 @@
             xLabel="culmen_length_mm",
             yLabel="culmen_depth_mm");
         //#############
-        bar_plot(culmen_length_mm, 10,'top')
-        h_bar_plot(culmen_depth_mm,10,'right')
+        bar_plot(culmen_length_mm,
+            10,
+            'top'
+            ,title='Dream',
+            xLabel="culmen_length_mm",
+            yLabel="culmen_depth_mm");
+
+        bar_plot(culmen_depth_mm,
+            10,
+            'right'
+            ,title='Torgersen',
+            xLabel="culmen_length_mm",
+            yLabel="culmen_depth_mm");
 
     }
     </script>
